@@ -68,8 +68,8 @@ class SiteController extends Controller
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => 1]);
         $articles = $query->offset($pagination->offset)
             ->limit($pagination->limit)
+            ->with('category')
             ->all();
-
 
         return $this->render('index', compact('articles', 'pagination'));
     }

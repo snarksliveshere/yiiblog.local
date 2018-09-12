@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\Pagination;
 
 /**
  * This is the model class for table "category".
@@ -54,5 +55,21 @@ class Category extends \yii\db\ActiveRecord
     public static function getAllWithArticles()
     {
         return Category::find()->with('articles')->all();
+    }
+
+    public static function getArticlesByCategory($id)
+    {
+        $query = Article::find()->where(['category_id' => $id])->with('category');
+        $count = $query->count();
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => 5]);
+        $articles = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->with('category')
+            ->all();
+
+        $data['articles'] = $articles;
+        $data['pagination'] = $pagination;
+        return $data;
+
     }
 }

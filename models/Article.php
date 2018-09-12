@@ -144,11 +144,11 @@ class Article extends \yii\db\ActiveRecord
         return Yii::$app->formatter->asDate($this->date);
     }
 
-    public static function getAll()
+    public static function getAllWithPagination($numPage = 5)
     {
         $query = Article::find();
         $count = $query->count();
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => 1]);
+        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => $numPage]);
         $articles = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->with('category')
